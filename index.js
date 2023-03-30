@@ -39,6 +39,7 @@ function cheese() {
 
 function check() {
     const boxes = document.getElementsByClassName("box");
+    const symbols = ['X', 'O'];
     const arr = [
         [0, 1, 2],
         [3, 4, 5],
@@ -49,36 +50,26 @@ function check() {
         [0, 4, 8],
         [2, 4, 6],
     ];
-    for (i = 0; i < arr.length; i++) {
-        if (
-            boxes[arr[i][0]].innerHTML === "X" &&
-            boxes[arr[i][1]].innerHTML === "X" &&
-            boxes[arr[i][2]].innerHTML === "X"
-        ) {
-            audioSania();
-            $(".sub").text("The first player wins");
-            $("body").addClass("first");
-            setTimeout(function () {
-                $("body").removeClass("first");
-                alert("The first player wins");
-                location.reload();
-            }, 200);
-        }
 
-        if (
-            boxes[arr[i][0]].innerHTML === "O" &&
-            boxes[arr[i][1]].innerHTML === "O" &&
-            boxes[arr[i][2]].innerHTML === "O"
-        ) {
-            audioKolia();
-            $(".sub").text("The second player wins");
-            $("body").addClass("second");
-            setTimeout(function () {
-                $("body").removeClass("second");
-                alert("The second player wins");
-                location.reload();
-            }, 200);
-        }
+    for (i = 0; i < arr.length; i++) {
+        symbols.forEach((symbol, index) => {
+            const isWinningCombination = boxes[arr[i][0]].innerHTML === symbol
+                && boxes[arr[i][1]].innerHTML === symbol
+                && boxes[arr[i][2]].innerHTML === symbol;
+
+            if (isWinningCombination) {
+                const winningSymbol = index === 0 ? 'first' : 'second';
+
+                winningSymbol ===' first' ? audioSania() : audioKolia();
+                $(".sub").text(`The ${winningSymbol} player wins`);
+                $("body").addClass(winningSymbol);
+                setTimeout(() => {
+                    $("body").removeClass(winningSymbol);
+                    alert(`The ${winningSymbol} player wins`);
+                    location.reload();
+                }, 200);
+            }
+        })
     }
 }
 
